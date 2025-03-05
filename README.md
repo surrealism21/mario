@@ -1,1 +1,1 @@
-![image info](./src/assets/Obmama.png)
+![obama](./src/assets/Obmama.png)
