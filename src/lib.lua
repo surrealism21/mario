@@ -18,3 +18,4 @@ function ScaleForScreen() -- 1920 x 1080 is the cool base, aka my computer. Ther
     love.graphics.scale(WFactor, HFactor)
 end
 -- that was really clean, actually.
+
