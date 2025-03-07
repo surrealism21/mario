@@ -65,13 +65,49 @@ underground = {
 love.graphics.setDefaultFilter("nearest", "nearest") -- when you actually LOVE yourself
 tilemap = love.graphics.newImage("assets/atlas/standard-overworld.png")
 
-tile = love.graphics.newQuad(1, 1, 16, 16, tilemap)
+function createTileTable(image)
+    local tableTile = {
+        metadata = {},
+        tiles = {},
+    }
+    local width = image:getWidth() / 18 -- 18 is the width / height of a tile, with any borders.
+    local height = image:getHeight() / 18
+    local tileName = nil -- nils will be set later in the loop
+    local xPos = nil
+    local yPos = nil
+    table.insert(tableTile.metadata, width)
+    table.insert(tableTile.metadata, height)
 
--- Tiles draw
-function drawTileSquare(x, y, width, height)
-    for current_y = 1, height do
-        for current_x = 1, width do
-                love.graphics.draw(tilemap, tile, ((x-1)*16)+(current_x*16), ((y-1)*16)+(current_y*16))
+    for yTile = 0, height do 
+        for xTile = 0, width do
+            tileName = xTile .. "," .. yTile -- add em' up
+            -- Ok now we get the pos
+            xPos = (xTile * 16) + (xTile+1) -- Adding xTile (and upcoming yTile) accounts for the Epics Offset, created by the borders. Add one to account for the fact it starts at nil
+            yPos = (yTile * 16) + (yTile+1)
+            -- Now we'll make our Quad
+            -- Ok now we insert in TABLE
+            table.insert(tableTile.tiles, love.graphics.newQuad(xPos, yPos, 16, 16, image))
         end
     end
+    return tableTile
+end
+
+function getTile(TileTable, tileX, tileY) return (tileX*tileY) + ((TileTable.metadata[1] - tileX) * (tileY - 1)) end
+
+
+--dirt = love.graphics.newQuad(1, 1, 16, 16, tilemap)
+--brick = love.graphics.newQuad(1+(16*0), 2+(16*1), 16, 16, tilemap)
+
+-- Tiles draw
+function drawTileSquare(tilemapType, tileQuad, x, y, width, height)
+    for current_y = 1, height do
+        for current_x = 1, width do
+            love.graphics.draw(tilemapType, tileQuad, ((x-1)*16)+(current_x*16), ((y-1)*16)+(current_y*16))
+        end
+    end
+end
+
+-- Assembled structures: these are "prefabs" like the bushes n' shit
+
+function drawAssembledStructure(assembledStructure, x, y)
 end

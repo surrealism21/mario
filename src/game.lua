@@ -13,14 +13,15 @@ function drawHomeScreen()
     love.graphics.setFont(font)
 
     --Render the homescreen!
-    -- tiles on the bottom
-    drawTileSquare(0, 15, 30, 2)
+    -- tiles decorations
+    tileX = 1
+    tileY = 1
+    drawTileSquare(tilemap, overworld.tiles[getTile(overworld, 1, 1)], 0, 15, 30, 2)
 
     -- title
     love.graphics.setDefaultFilter("nearest", "nearest")
 
     -- cursor
-    
     love.graphics.draw(logo, (240-(logo:getWidth() / 2)), 25) -- this centers the logo on the X some fucking how what the 😭
     love.graphics.draw(menus, (260-(menus:getWidth() / 2)), 150)
     if (cursorSettings == 1) then

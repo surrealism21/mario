@@ -8,6 +8,7 @@ function love.load()
     
     Obama = love.graphics.newImage("assets/Obmama.png")
 	menuCursor = love.graphics.newImage("assets/menuCursor.png")
+	overworld = createTileTable(tilemap)
 
 end
 cursorSettings = 1
