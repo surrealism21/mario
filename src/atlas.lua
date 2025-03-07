@@ -65,18 +65,21 @@ underground = {
 love.graphics.setDefaultFilter("nearest", "nearest") -- when you actually LOVE yourself
 tilemap = love.graphics.newImage("assets/atlas/standard-overworld.png")
 
+
+-- Makes a tile table for a tilemap image. Designed for using any tileset pretty much out of the box. Written from scratch actually
 function createTileTable(image)
     local tableTile = {
-        metadata = {},
-        tiles = {},
+        metadata = {}, -- Metadata table for height & width information and such
+        tiles = {}, -- Tile quads
     }
     local width = image:getWidth() / 18 -- 18 is the width / height of a tile, with any borders.
     local height = image:getHeight() / 18
     local tileName = nil -- nils will be set later in the loop
     local xPos = nil
     local yPos = nil
-    table.insert(tableTile.metadata, width)
-    table.insert(tableTile.metadata, height)
+    table.insert(tableTile.metadata, width) -- tiles wide
+    table.insert(tableTile.metadata, height) -- tiles high
+    table.insert(tableTile.metadata, width*height) -- total number of tiles
 
     for yTile = 0, height do 
         for xTile = 0, width do
@@ -84,21 +87,18 @@ function createTileTable(image)
             -- Ok now we get the pos
             xPos = (xTile * 16) + (xTile+1) -- Adding xTile (and upcoming yTile) accounts for the Epics Offset, created by the borders. Add one to account for the fact it starts at nil
             yPos = (yTile * 16) + (yTile+1)
-            -- Now we'll make our Quad
-            -- Ok now we insert in TABLE
+            -- Ok now we insert in TABLE's tile section
             table.insert(tableTile.tiles, love.graphics.newQuad(xPos, yPos, 16, 16, image))
         end
     end
     return tableTile
 end
 
+-- gets a tile from a tilemap, for drawing or something. EX to get 1,1 tile in the "overworld" set, I would use overworld.tiles[getTile(overworld, 1, 1)] to get the tile's number.
+-- Maths: 1st step. Get the tiles poses and make them a single number. 2nd step. Add a offset - the amount away from the edge of the tilemap -1 because lua starts at 1 🙃
 function getTile(TileTable, tileX, tileY) return (tileX*tileY) + ((TileTable.metadata[1] - tileX) * (tileY - 1)) end
 
-
---dirt = love.graphics.newQuad(1, 1, 16, 16, tilemap)
---brick = love.graphics.newQuad(1+(16*0), 2+(16*1), 16, 16, tilemap)
-
--- Tiles draw
+-- Draw a square of tiles with loops
 function drawTileSquare(tilemapType, tileQuad, x, y, width, height)
     for current_y = 1, height do
         for current_x = 1, width do
@@ -108,6 +108,7 @@ function drawTileSquare(tilemapType, tileQuad, x, y, width, height)
 end
 
 -- Assembled structures: these are "prefabs" like the bushes n' shit
+-- TODO: make some assembled structures, and a rendering system for them...
 
 function drawAssembledStructure(assembledStructure, x, y)
 end
