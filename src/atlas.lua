@@ -72,20 +72,21 @@ function createTileTable(image)
         metadata = {}, -- Metadata table for height & width information and such
         tiles = {}, -- Tile quads
     }
-    local width = image:getWidth() / 18 -- 18 is the width / height of a tile, with any borders.
-    local height = image:getHeight() / 18
+    local width = ((image:getWidth() - 1) / 17) - 1 -- the -1 is due to an unexplainable bug i cannot explain. It's kind of a hack. I COULD probably figure it out, but it's Friday and I want to watch YouTube.
+    local height = ((image:getHeight() - 1) / 17) - 1
     local tileName = nil -- nils will be set later in the loop
     local xPos = nil
     local yPos = nil
     table.insert(tableTile.metadata, width) -- tiles wide
     table.insert(tableTile.metadata, height) -- tiles high
     table.insert(tableTile.metadata, width*height) -- total number of tiles
+    table.insert(tableTile.metadata, image) -- image the tiles use
 
     for yTile = 0, height do 
         for xTile = 0, width do
             tileName = xTile .. "," .. yTile -- add em' up
             -- Ok now we get the pos
-            xPos = (xTile * 16) + (xTile+1) -- Adding xTile (and upcoming yTile) accounts for the Epics Offset, created by the borders. Add one to account for the fact it starts at nil
+            xPos = (xTile * 16) + (xTile+1)
             yPos = (yTile * 16) + (yTile+1)
             -- Ok now we insert in TABLE's tile section
             table.insert(tableTile.tiles, love.graphics.newQuad(xPos, yPos, 16, 16, image))
@@ -96,7 +97,9 @@ end
 
 -- gets a tile from a tilemap, for drawing or something. EX to get 1,1 tile in the "overworld" set, I would use overworld.tiles[getTile(overworld, 1, 1)] to get the tile's number.
 -- Maths: 1st step. Get the tiles poses and make them a single number. 2nd step. Add a offset - the amount away from the edge of the tilemap -1 because lua starts at 1 🙃
-function getTile(TileTable, tileX, tileY) return (tileX*tileY) + ((TileTable.metadata[1] - tileX) * (tileY - 1)) end
+function getTile(TileTable, tileX, tileY) return (tileX*tileY) + (((TileTable.metadata[1] + 1) - tileX) * (tileY - 1)) end -- again adding 1 to the metadata is because of stupid hack
+
+function getTileCoordPair(TileTable, tilePos) return (tilePos[1]*tilePos[2]) + (((TileTable.metadata[1] +1) - tilePos[1]) * (tilePos[2] -1)) end -- Same thing as last one but for a coordinate pair array.
 
 -- Draw a square of tiles with loops
 function drawTileSquare(tilemapType, tileQuad, x, y, width, height)
@@ -110,5 +113,55 @@ end
 -- Assembled structures: these are "prefabs" like the bushes n' shit
 -- TODO: make some assembled structures, and a rendering system for them...
 
-function drawAssembledStructure(assembledStructure, x, y)
+function drawAssembledStructure(aStruct, baseTiles, x, y)
+    local uhm = {}
+    for current_row = 1, aStruct.metadata.rows do
+        for current_column = 1, aStruct.metadata.columns do
+            uhm = aStruct[current_row]
+            if uhm[current_column] ~= nil then
+                love.graphics.draw(baseTiles.metadata[4], baseTiles.tiles[getTileCoordPair(baseTiles, uhm[current_column])], (x*16)+((current_column-1)*16), (y*16)+((current_row-1)*16))
+            end
+        end
+    end
 end
+
+-- Actual assembled structure arrays
+-- these are the built in ones, not the txt files users can provide... do not change!
+
+-- Rows are X rows. x1, x2 etc... these are the tiles themselves. If a "x" is nil, do not draw a tile. DO NOT use a blank tile for a nil space.
+
+-- Metadata (you must set "tilemap" and "rows")...
+-- These should be obvious, but more may be added eventually
+Bush = {
+    metadata = {
+        rows = 1,
+        columns = 3,
+    },
+    {{1, 6}, {2, 6}, {3, 6}},
+}
+
+TwoBush = {
+    metadata = {
+        rows = 1,
+        columns = 4,
+    },
+    {{1, 6}, {2, 6}, {2, 6}, {3, 6}},
+}
+
+ThreeBush = {
+    metadata = {
+        rows = 1,
+        columns = 5,
+    },
+    {{1, 6}, {2, 6}, {2, 6}, {2, 6}, {3, 6}},
+}
+
+BigHill = {
+    metadata = {
+        rows = 3,
+        columns = 5,
+    },
+    {nil, nil, {3, 7}, nil, nil},
+    {nil, {1, 8}, {2, 8}, {5, 8}, nil},
+    {{1,8}, {2, 8}, {3, 8}, {2, 8}, {5, 8}},
+}
