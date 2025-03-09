@@ -1,8 +1,6 @@
 require("lib")
 require("atlas")
 require("game")
-require("mario")
-require("ActorBase")
 
 function love.load()
     font = love.graphics.newFont("assets/font.ttf")
