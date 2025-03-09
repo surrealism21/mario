@@ -8,9 +8,11 @@ function love.load()
     
     Obama = love.graphics.newImage("assets/Obmama.png")
 	menuCursor = love.graphics.newImage("assets/menuCursor.png")
-	overworld = createTileTable(overworldTilemap)
+	bouns = {}
+	bonus = createTileTable(bonusTilemap, 2, 5, 3)
+	overworld = createTileTable(overworldTilemap, 1, 9, 8)
 	tilemapType = overworldTilemap
-	tileTable = nil -- like this to prove a point lmfao
+	tileTable = overworld
 	loadHomeScreen()
 end
 cursorSettings = 1

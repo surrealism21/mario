@@ -24,7 +24,11 @@ function table.clone(org)
 end
 
 function tablelength(T)
-    local count = 0
-    for _ in pairs(T) do count = count + 1 end
-    return count
+    if T ~= nil then
+        local count = 0
+        for _ in pairs(T) do count = count + 1 end
+        return count
+    else
+        return nil
+    end
 end
