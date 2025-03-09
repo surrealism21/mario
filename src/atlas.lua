@@ -63,7 +63,7 @@ underground = {
 
 -- images
 love.graphics.setDefaultFilter("nearest", "nearest") -- when you actually LOVE yourself
-tilemap = love.graphics.newImage("assets/atlas/standard-overworld.png")
+overworldTilemap = love.graphics.newImage("assets/atlas/standard-overworld.png")
 
 
 -- Makes a tile table for a tilemap image. Designed for using any tileset pretty much out of the box. Written from scratch actually
@@ -165,3 +165,44 @@ BigHill = {
     {nil, {1, 8}, {2, 8}, {5, 8}, nil},
     {{1,8}, {2, 8}, {3, 8}, {2, 8}, {5, 8}},
 }
+
+-- Let's do collider prep now
+
+-- Hardcoded first level, created so if I could create the rest
+-- This is also the level format
+titlescreen = {
+    squareNum = 1,
+    structureNum = 2,
+    squares = {
+        -- FORMAT: 1-2: getTile function, 3: x 4: y 5: width 6: height
+        {1, 1, 0, 15, 30, 2},
+    },
+    structures = {
+        {BigHill, 0, 12}, {ThreeBush, 7, 14},
+    },
+}
+
+function prepareLevelCollisionTable(level)
+    local collisionTable = {}
+    local squares = nil
+    -- First we tackle to colliders of tileSquares
+    for currentSquare = 1, level.squareNum do
+        square = level.squares[currentSquare]
+        -- Adding x, y, width, height to table in a array
+        table.insert(collisionTable, {square[4], square[5], square[6], square[7]})
+    end
+    return collisionTable
+end
+
+function drawLevelTable(level) -- Draws a whole table...
+    --First we draw squares!
+    for currentSquare = 1, level.squareNum do
+        local square = level.squares[currentSquare]
+        drawTileSquare(tilemapType, tileTable.tiles[getTile(tileTable, square[1], square[2])], square[3], square[4], square[5], square[6])
+    end
+    -- now for the prefabs
+    for currentStruct = 1, level.structureNum do
+        structure = level.structures[currentStruct]
+        drawAssembledStructure(structure[1], tileTable, structure[2], structure[3])
+    end
+end

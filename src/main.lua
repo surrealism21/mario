@@ -1,6 +1,8 @@
 require("lib")
 require("atlas")
 require("game")
+require("mario")
+require("ActorBase")
 
 function love.load()
     font = love.graphics.newFont("assets/font.ttf")
@@ -8,8 +10,10 @@ function love.load()
     
     Obama = love.graphics.newImage("assets/Obmama.png")
 	menuCursor = love.graphics.newImage("assets/menuCursor.png")
-	overworld = createTileTable(tilemap)
-
+	overworld = createTileTable(overworldTilemap)
+	tilemapType = overworldTilemap
+	tileTable = nil -- like this to prove a point lmfao
+	loadHomeScreen()
 end
 cursorSettings = 1
 function love.draw()

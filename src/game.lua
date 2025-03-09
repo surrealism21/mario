@@ -16,9 +16,11 @@ function drawHomeScreen()
     -- tiles decorations
     tileX = 1
     tileY = 1
-    drawTileSquare(tilemap, overworld.tiles[getTile(overworld, 1, 1)], 0, 15, 30, 2)
-    drawAssembledStructure(BigHill, overworld, 0, 12)
-    drawAssembledStructure(ThreeBush, overworld, 7, 14)
+    --drawTileSquare(tilemap, overworld.tiles[getTile(overworld, 1, 1)], 0, 15, 30, 2)
+    --drawAssembledStructure(BigHill, overworld, 0, 12)
+    --drawAssembledStructure(ThreeBush, overworld, 7, 14)
+    --drawLevelTable(titlescreen, tilemap, overworld)
+    drawLevelTable(titlescreen)
 
     -- title
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -35,6 +37,11 @@ end
 
 function runHomeScreen(dt)
 
+end
+
+function loadHomeScreen()
+    prepareLevelCollisionTable(titlescreen)
+    tileTable = overworld
 end
 
 function love.keypressed(key, scancode, isrepeat)

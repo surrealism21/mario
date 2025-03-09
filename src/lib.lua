@@ -19,3 +19,6 @@ function ScaleForScreen() -- 1920 x 1080 is the cool base, aka my computer. Ther
 end
 -- that was really clean, actually.
 
+function table.clone(org)
+    return {unpack(org)}
+end
