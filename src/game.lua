@@ -17,11 +17,12 @@ function drawHomeScreen()
     -- tiles decorations
     tileX = 1
     tileY = 1
-    --drawTileSquare(overworldTilemap, overworld.tiles[getTile(overworld, 1, 1)], 0, 15, 30, 2)
-    --drawAssembledStructure(BigHill, overworld, 0, 12)
+    --drawTileSquare(CURRENT_tileTable.tiles[getTile(2, 1)], 0, 15, 30, 2)
+    --drawAssembledStructure(BigHill, 0, 12)
     --drawAssembledStructure(ThreeBush, overworld, 7, 14)
     --drawLevelTable(titlescreen, tilemap, overworld)
     drawLevelTable(titlescreen)
+    --render9patch(bonus9Patch, 0, 15, 30, 2)
 
     -- title
     love.graphics.setDefaultFilter("nearest", "nearest")

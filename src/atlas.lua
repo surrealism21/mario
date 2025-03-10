@@ -93,15 +93,15 @@ end
 
 -- gets a tile from a tilemap, for drawing or something. EX to get 1,1 tile in the "overworld" set, I would use overworld.tiles[getTile(overworld, 1, 1)] to get the tile's number.
 -- Maths: 1st step. Get the tiles poses and make them a single number. 2nd step. Add a offset - the amount away from the edge of the tilemap -1 because lua starts at 1 🙃
-function getTile(TileTable, tileX, tileY) return (TileTable.metadata[1] * (tileY - 1)) + (tileX + (tileY - 1))  end
+function getTile(tileX, tileY) return (CURRENT_tileTable.metadata[1] * (tileY - 1)) + (tileX + (tileY - 1))  end
 
-function getTileCoordPair(TileTable, tilePos) return (TileTable.metadata[1] * (tilePos[2] - 1)) + (tilePos[1] + (tilePos[2] - 1))  end
+function getTileCoordPair(tilePos) return (CURRENT_tileTable.metadata[1] * (tilePos[2] - 1)) + (tilePos[1] + (tilePos[2] - 1))  end
 
 -- Draw a square of tiles with loops
-function drawTileSquare(tilemapType, tileQuad, x, y, width, height)
+function drawTileSquare(tileQuad, x, y, width, height)
     for current_y = 1, height do
         for current_x = 1, width do
-            love.graphics.draw(tilemapType, tileQuad, ((x-1)*16)+(current_x*16), ((y-1)*16)+(current_y*16))
+            love.graphics.draw(CURRENT_tilemap, tileQuad, ((x-1)*16)+(current_x*16), ((y-1)*16)+(current_y*16))
         end
     end
 end
@@ -109,13 +109,13 @@ end
 -- Assembled structures: these are "prefabs" like the bushes n' shit
 -- TODO: make some assembled structures, and a rendering system for them...
 
-function drawAssembledStructure(aStruct, baseTiles, x, y)
+function drawAssembledStructure(aStruct, x, y)
     local uhm = {}
     for current_row = 1, aStruct.metadata.rows do
         for current_column = 1, aStruct.metadata.columns do
             uhm = aStruct[current_row]
             if uhm[current_column] ~= nil then
-                love.graphics.draw(baseTiles.metadata[4], baseTiles.tiles[getTileCoordPair(baseTiles, uhm[current_column])], (x*16)+((current_column-1)*16), (y*16)+((current_row-1)*16))
+                love.graphics.draw(CURRENT_tileTable.metadata[4], CURRENT_tileTable.tiles[getTileCoordPair(uhm[current_column])], (x*16)+((current_column-1)*16), (y*16)+((current_row-1)*16))
             end
         end
     end
@@ -180,17 +180,54 @@ function drawLevelTable(level) -- Draws a whole table...
     --First we draw squares!
     for currentSquare = 1, tablelength(level.squares) do
         local square = level.squares[currentSquare]
-        drawTileSquare(tilemapType, tileTable.tiles[getTile(tileTable, square[1], square[2])], square[3], square[4], square[5], square[6])
+        drawTileSquare(CURRENT_tileTable.tiles[getTile(square[1], square[2])], square[3], square[4], square[5], square[6])
     end
     -- now for the prefabs
     if tablelength(level.structures) ~= nil then
         for currentStruct = 1, tablelength(level.structures) do
             structure = level.structures[currentStruct]
-            drawAssembledStructure(structure[1], tileTable, structure[2], structure[3])
+            drawAssembledStructure(structure[1], structure[2], structure[3])
         end
     end
 end
 
--- Okay, it's time to make tile squares an actor
--- With the epics of our prepareLevelCollisionTable...
--- TODO: later
+-- 9 Patch area: 9 patches are tiles that can, uhm, draw. Google it.
+-- 9 patches need 9 tiles.
+
+bonus9Patch = {
+    {1, 1}, {2, 1}, {3, 1},
+    {1, 2}, {2, 2}, {3, 2},
+    {1, 3}, {2, 3}, {3, 3},
+}
+
+function render9patch(ninePatch, x, y, width, height) -- Last one is a array, in order.
+    -- Okay, first corner.
+    love.graphics.draw(CURRENT_tilemap, CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[1])], x*16, y*16)
+    -- Okay, now we do the width here're
+    if width > 2 then
+        drawTileSquare(CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[2])], x+1, y, width-2, 1)
+    end
+    -- 3rd thing
+    love.graphics.draw(CURRENT_tilemap, CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[3])], (x+width-1)*16, y*16)
+    -- I'm left high
+    if height > 2 then
+        drawTileSquare(CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[4])], x, y+1, 1, height-2)
+    end
+    -- Middle: this will help OK
+    if width > 2 and height > 2 then
+        drawTileSquare(CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[5])], x+1, y+1, width-2, height-2)
+    end
+    -- Right thing whatever i'm deatg
+    if height > 2 then
+        drawTileSquare(CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[6])], x+width-1, y+1, 1, height-2)
+    end
+    -- bottom to the Fuckking... left
+    love.graphics.draw(CURRENT_tilemap, CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[7])], x*16, ((y-1)*16)+(height*16))
+    -- Bot. width
+    if width > 2 then
+        drawTileSquare(CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[8])], x+1, y+height-1, width-2, 1)
+    end
+    -- this code documentation is so good
+    love.graphics.draw(CURRENT_tilemap, CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[9])], (x+width-1)*16, ((y-1)*16)+(height*16))
+end
+
