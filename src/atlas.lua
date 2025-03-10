@@ -169,7 +169,7 @@ function prepareLevelCollisionTable(level)
     local squares = nil
     -- First we tackle to colliders of tileSquares
     for currentSquare = 1, tablelength(level.squares) do
-        square = level.squares[currentSquare]
+        local square = level.squares[currentSquare]
         -- Adding x, y, width, height to table in a array
         table.insert(collisionTable, {"tile", square[4], square[5], square[6], square[7]})
     end
@@ -185,14 +185,14 @@ function drawTable(Pa_tilemap, Pa_tileTable, level) -- Draws a whole table...
     -- now for the prefabs
     if tablelength(level.structures) ~= nil then
         for currentStruct = 1, tablelength(level.structures) do
-            structure = level.structures[currentStruct]
+            local structure = level.structures[currentStruct]
             drawAssembledStructure(Pa_tileTable, structure[1], structure[2], structure[3])
         end
     end
     -- 9 patches
     if tablelength(level.ninePatches) ~= nil then
         for currentPatch = 1, tablelength(level.ninePatches) do
-            patch = level.ninePatches[currentPatch]
+            local patch = level.ninePatches[currentPatch]
             render9patch(Pa_tilemap, Pa_tileTable, patch[1], patch[2], patch[3], patch[4], patch[5])
         end
     end
@@ -207,7 +207,7 @@ bonus9Patch = {
     {1, 3}, {2, 3}, {3, 3},
 }
 
-function render9patch(Pa_tilemap, Pa_tileTable, ninePatch, x, y, width, height) -- Last one is a array, in order.
+function render9patch(Pa_tilemap, Pa_tileTable, ninePatch, x, y, width, height) 
     -- Okay, first corner.
     love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[1])], x*16, y*16)
     -- Okay, now we do the width here're
@@ -219,10 +219,6 @@ function render9patch(Pa_tilemap, Pa_tileTable, ninePatch, x, y, width, height) 
     -- I'm left high
     if height > 2 then
         drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[4])], x, y+1, 1, height-2)
-    end
-    -- Middle: this will help OK
-    if width > 2 and height > 2 then
-        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[5])], x+1, y+1, width-2, height-2)
     end
     -- Right thing whatever i'm deatg
     if height > 2 then
@@ -236,5 +232,29 @@ function render9patch(Pa_tilemap, Pa_tileTable, ninePatch, x, y, width, height) 
     end
     -- this code documentation is so good
     love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[9])], (x+width-1)*16, ((y-1)*16)+(height*16))
+    -- Middle: this must be last so I can make excuse to not make auto-tiling
+    if width > 2 and height > 2 then
+        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[5])], x+1, y+1, width-2, height-2)
+    end
 end
+
+function make9PatchBorders(level)
+    -- Okay, we first make the table. This is only ran once.
+    local borderTable = {}
+    for currentPatch = 1, tablelength(level.ninePatches) do
+        local patch = level.ninePatches[currentPatch]
+        local patchName = "Patch_"..tostring(currentPatch)
+        -- Adding patch type, x, y, width, height to table in a array
+        table.insert(borderTable, {patchName, patch[1], patch[2], patch[3], patch[4], patch[5]})
+    end
+    return borderTable
+end
+
+function mergeNinePatches(borderTable) -- TODO: finish this tomorrow / soon
+
+end
+
+
+
+
 
