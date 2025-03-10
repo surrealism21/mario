@@ -9,4 +9,19 @@ titlescreen = {
         -- Same as a normal call of the render function but without required tilemap, that is done by weird globals that do weird things
         {BigHill, 0, 12}, {ThreeBush, 7, 14},
     },
+    ninePatches = {
+        -- Same as normal call without tilemap.
+    },
+}
+
+ninePatchTableTest = {
+    squares = {
+
+    },
+    structures = {
+
+    },
+    ninePatches = {
+        {bonus9Patch, 1, 2, 4, 4},
+    },
 }

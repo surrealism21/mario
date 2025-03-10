@@ -189,6 +189,13 @@ function drawTable(Pa_tilemap, Pa_tileTable, level) -- Draws a whole table...
             drawAssembledStructure(Pa_tileTable, structure[1], structure[2], structure[3])
         end
     end
+    -- 9 patches
+    if tablelength(level.ninePatches) ~= nil then
+        for currentPatch = 1, tablelength(level.ninePatches) do
+            patch = level.ninePatches[currentPatch]
+            render9patch(Pa_tilemap, Pa_tileTable, patch[1], patch[2], patch[3], patch[4], patch[5])
+        end
+    end
 end
 
 -- 9 Patch area: 9 patches are tiles that can, uhm, draw. Google it.

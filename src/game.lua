@@ -23,6 +23,7 @@ function drawHomeScreen()
     --drawLevelTable(titlescreen, tilemap, overworld)
     drawTable(Pa1_tilemap, Pa1_tileTable, titlescreen)
     --render9patch(Pa2_tilemap, Pa2_tileTable, bonus9Patch, 0, 10, 30, 2)
+    drawTable(Pa2_tilemap, Pa2_tileTable, ninePatchTableTest)
 
     -- title
     love.graphics.setDefaultFilter("nearest", "nearest")
