@@ -22,7 +22,7 @@ function drawHomeScreen()
     --drawAssembledStructure(ThreeBush, overworld, 7, 14)
     --drawLevelTable(titlescreen, tilemap, overworld)
     drawTable(Pa1_tilemap, Pa1_tileTable, titlescreen)
-    --drawTable(Pa2_tilemap, Pa2_tileTable, ninePatchTableTest)
+    drawTable(Pa2_tilemap, Pa2_tileTable, ninePatchTableTest)
 
     -- title
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -43,7 +43,6 @@ end
 
 function loadHomeScreen()
     prepareLevelCollisionTable(titlescreen)
-    patches_borderTable = make9PatchBorders(ninePatchTableTest)
 end
 
 function love.keypressed(key, scancode, isrepeat)

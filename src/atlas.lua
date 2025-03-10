@@ -205,6 +205,9 @@ bonus9Patch = {
     {1, 1}, {2, 1}, {3, 1},
     {1, 2}, {2, 2}, {3, 2},
     {1, 3}, {2, 3}, {3, 3},
+    -- corners
+    {4, 1}, {5, 1},
+    {4, 2}, {5, 2},
 }
 
 function render9patch(Pa_tilemap, Pa_tileTable, ninePatch, x, y, width, height) 
@@ -237,23 +240,6 @@ function render9patch(Pa_tilemap, Pa_tileTable, ninePatch, x, y, width, height)
         drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[5])], x+1, y+1, width-2, height-2)
     end
 end
-
-function make9PatchBorders(level)
-    -- Okay, we first make the table. This is only ran once.
-    local borderTable = {}
-    for currentPatch = 1, tablelength(level.ninePatches) do
-        local patch = level.ninePatches[currentPatch]
-        local patchName = "Patch_"..tostring(currentPatch)
-        -- Adding patch type, x, y, width, height to table in a array
-        table.insert(borderTable, {patchName, patch[1], patch[2], patch[3], patch[4], patch[5]})
-    end
-    return borderTable
-end
-
-function mergeNinePatches(borderTable) -- TODO: finish this tomorrow / soon
-
-end
-
 
 
 
