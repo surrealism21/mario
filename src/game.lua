@@ -21,8 +21,8 @@ function drawHomeScreen()
     --drawAssembledStructure(BigHill, 0, 12)
     --drawAssembledStructure(ThreeBush, overworld, 7, 14)
     --drawLevelTable(titlescreen, tilemap, overworld)
-    drawLevelTable(titlescreen)
-    --render9patch(bonus9Patch, 0, 15, 30, 2)
+    drawTable(Pa1_tilemap, Pa1_tileTable, titlescreen)
+    --render9patch(Pa2_tilemap, Pa2_tileTable, bonus9Patch, 0, 10, 30, 2)
 
     -- title
     love.graphics.setDefaultFilter("nearest", "nearest")

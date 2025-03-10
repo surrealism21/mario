@@ -11,8 +11,10 @@ function love.load()
 	bouns = {}
 	bonus = createTileTable(bonusTilemap, 2, 5, 3)
 	overworld = createTileTable(overworldTilemap, 1, 9, 8)
-	CURRENT_tilemap = overworldTilemap
-	CURRENT_tileTable = overworld
+	Pa1_tilemap = overworldTilemap
+	Pa1_tileTable = overworld
+	Pa2_tilemap = bonusTilemap
+	Pa2_tileTable = bonus
 	loadHomeScreen()
 end
 cursorSettings = 1

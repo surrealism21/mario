@@ -93,15 +93,15 @@ end
 
 -- gets a tile from a tilemap, for drawing or something. EX to get 1,1 tile in the "overworld" set, I would use overworld.tiles[getTile(overworld, 1, 1)] to get the tile's number.
 -- Maths: 1st step. Get the tiles poses and make them a single number. 2nd step. Add a offset - the amount away from the edge of the tilemap -1 because lua starts at 1 🙃
-function getTile(tileX, tileY) return (CURRENT_tileTable.metadata[1] * (tileY - 1)) + (tileX + (tileY - 1))  end
+function getTile(Pa_tileTable, tileX, tileY) return (Pa_tileTable.metadata[1] * (tileY - 1)) + (tileX + (tileY - 1))  end
 
-function getTileCoordPair(tilePos) return (CURRENT_tileTable.metadata[1] * (tilePos[2] - 1)) + (tilePos[1] + (tilePos[2] - 1))  end
+function getTileCoordPair(Pa_tileTable, tilePos) return (Pa_tileTable.metadata[1] * (tilePos[2] - 1)) + (tilePos[1] + (tilePos[2] - 1))  end
 
 -- Draw a square of tiles with loops
-function drawTileSquare(tileQuad, x, y, width, height)
+function drawTileSquare(Pa_tilemap, tileQuad, x, y, width, height)
     for current_y = 1, height do
         for current_x = 1, width do
-            love.graphics.draw(CURRENT_tilemap, tileQuad, ((x-1)*16)+(current_x*16), ((y-1)*16)+(current_y*16))
+            love.graphics.draw(Pa_tilemap, tileQuad, ((x-1)*16)+(current_x*16), ((y-1)*16)+(current_y*16))
         end
     end
 end
@@ -109,13 +109,13 @@ end
 -- Assembled structures: these are "prefabs" like the bushes n' shit
 -- TODO: make some assembled structures, and a rendering system for them...
 
-function drawAssembledStructure(aStruct, x, y)
+function drawAssembledStructure(Pa_tileTable, aStruct, x, y)
     local uhm = {}
     for current_row = 1, aStruct.metadata.rows do
         for current_column = 1, aStruct.metadata.columns do
             uhm = aStruct[current_row]
             if uhm[current_column] ~= nil then
-                love.graphics.draw(CURRENT_tileTable.metadata[4], CURRENT_tileTable.tiles[getTileCoordPair(uhm[current_column])], (x*16)+((current_column-1)*16), (y*16)+((current_row-1)*16))
+                love.graphics.draw(Pa_tileTable.metadata[4], Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, uhm[current_column])], (x*16)+((current_column-1)*16), (y*16)+((current_row-1)*16))
             end
         end
     end
@@ -176,17 +176,17 @@ function prepareLevelCollisionTable(level)
     return collisionTable
 end
 
-function drawLevelTable(level) -- Draws a whole table...
+function drawTable(Pa_tilemap, Pa_tileTable, level) -- Draws a whole table...
     --First we draw squares!
     for currentSquare = 1, tablelength(level.squares) do
         local square = level.squares[currentSquare]
-        drawTileSquare(CURRENT_tileTable.tiles[getTile(square[1], square[2])], square[3], square[4], square[5], square[6])
+        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTile(Pa_tileTable, square[1], square[2])], square[3], square[4], square[5], square[6])
     end
     -- now for the prefabs
     if tablelength(level.structures) ~= nil then
         for currentStruct = 1, tablelength(level.structures) do
             structure = level.structures[currentStruct]
-            drawAssembledStructure(structure[1], structure[2], structure[3])
+            drawAssembledStructure(Pa_tileTable, structure[1], structure[2], structure[3])
         end
     end
 end
@@ -200,34 +200,34 @@ bonus9Patch = {
     {1, 3}, {2, 3}, {3, 3},
 }
 
-function render9patch(ninePatch, x, y, width, height) -- Last one is a array, in order.
+function render9patch(Pa_tilemap, Pa_tileTable, ninePatch, x, y, width, height) -- Last one is a array, in order.
     -- Okay, first corner.
-    love.graphics.draw(CURRENT_tilemap, CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[1])], x*16, y*16)
+    love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[1])], x*16, y*16)
     -- Okay, now we do the width here're
     if width > 2 then
-        drawTileSquare(CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[2])], x+1, y, width-2, 1)
+        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[2])], x+1, y, width-2, 1)
     end
     -- 3rd thing
-    love.graphics.draw(CURRENT_tilemap, CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[3])], (x+width-1)*16, y*16)
+    love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[3])], (x+width-1)*16, y*16)
     -- I'm left high
     if height > 2 then
-        drawTileSquare(CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[4])], x, y+1, 1, height-2)
+        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[4])], x, y+1, 1, height-2)
     end
     -- Middle: this will help OK
     if width > 2 and height > 2 then
-        drawTileSquare(CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[5])], x+1, y+1, width-2, height-2)
+        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[5])], x+1, y+1, width-2, height-2)
     end
     -- Right thing whatever i'm deatg
     if height > 2 then
-        drawTileSquare(CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[6])], x+width-1, y+1, 1, height-2)
+        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[6])], x+width-1, y+1, 1, height-2)
     end
     -- bottom to the Fuckking... left
-    love.graphics.draw(CURRENT_tilemap, CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[7])], x*16, ((y-1)*16)+(height*16))
+    love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[7])], x*16, ((y-1)*16)+(height*16))
     -- Bot. width
     if width > 2 then
-        drawTileSquare(CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[8])], x+1, y+height-1, width-2, 1)
+        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[8])], x+1, y+height-1, width-2, 1)
     end
     -- this code documentation is so good
-    love.graphics.draw(CURRENT_tilemap, CURRENT_tileTable.tiles[getTileCoordPair(ninePatch[9])], (x+width-1)*16, ((y-1)*16)+(height*16))
+    love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[9])], (x+width-1)*16, ((y-1)*16)+(height*16))
 end
 
