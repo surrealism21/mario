@@ -241,6 +241,17 @@ function render9patch(Pa_tilemap, Pa_tileTable, ninePatch, x, y, width, height)
     end
 end
 
+function drawLevelFile(megaTable)
+    for Pa = 1, tablelength(megaTable.Pa) do
+        local currentTilemap = megaTable["Pa"..tostring(Pa).."_tilemap"]
+        local currentTileTable = megaTable["Pa"..tostring(Pa).."_tileTable"]
+
+        local PaNo = megaTable.Pa[Pa]
+        for currentLayer = 1, tablelength(PaNo) do
+            drawTable(currentTilemap, currentTileTable, PaNo[currentLayer])
+        end
+    end
+end
 
 
 

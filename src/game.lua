@@ -1,5 +1,6 @@
 require("atlas")
-require("level")
+require("levelFormat")
+require("editor")
 
 
 -- Home's new screens
@@ -21,8 +22,9 @@ function drawHomeScreen()
     --drawAssembledStructure(BigHill, 0, 12)
     --drawAssembledStructure(ThreeBush, overworld, 7, 14)
     --drawLevelTable(titlescreen, tilemap, overworld)
-    drawTable(Pa1_tilemap, Pa1_tileTable, titlescreen)
-    drawTable(Pa2_tilemap, Pa2_tileTable, ninePatchTableTest)
+    --local pa1 = level.Pa[1]
+    --drawTable(Pa1_tilemap, Pa1_tileTable, pa1[1])
+    drawLevelFile(level)
 
     -- title
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -46,11 +48,12 @@ function loadHomeScreen()
 end
 
 function love.keypressed(key, scancode, isrepeat)
-    if GAME_STATE == "HomeScreen" then
-        if key == "up" then
-            cursorSettings = 1
-        elseif key == "down" then
-            cursorSettings = 2
-        end
+    if key == "up" then
+        cursorSettings = 1
+    elseif key == "down" then
+        cursorSettings = 2
+    elseif key == "l" then 
+        GAME_STATE = "editor"
+        LEVEL_EDITOR_SETUP(titlescreen)
     end
 end

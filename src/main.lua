@@ -3,28 +3,32 @@ require("atlas")
 require("game")
 
 function love.load()
+	GAME_STATE = "homeScreen"
+
     font = love.graphics.newFont("assets/font.ttf")
     love.graphics.setBackgroundColor(sky)
     
     Obama = love.graphics.newImage("assets/Obmama.png")
 	menuCursor = love.graphics.newImage("assets/menuCursor.png")
-	bouns = {}
-	bonus = createTileTable(bonusTilemap, 2, 5, 3)
-	overworld = createTileTable(overworldTilemap, 1, 9, 8)
-	Pa1_tilemap = overworldTilemap
-	Pa1_tileTable = overworld
-	Pa2_tilemap = bonusTilemap
-	Pa2_tileTable = bonus
+	
 	loadHomeScreen()
 end
 cursorSettings = 1
 function love.draw()
     ScaleForScreen()
-    drawHomeScreen()
+	if GAME_STATE == "homeScreen" then
+		drawHomeScreen()
+	elseif GAME_STATE == "editor" then
+		drawEditor()
+	end
 end
 
 function love.run(dt) 
-    runHomeScreen(dt)
+	if GAME_STATE == "homeScreen" then
+		runHomeScreen(dt)
+	elseif GAME_STATE == "editor" then
+		runEditor(dt)
+	end
 
     if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
 
