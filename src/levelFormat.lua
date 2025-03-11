@@ -8,8 +8,8 @@ level = {
     -- Tilesets.
     Pa1_tilemap = overworldTilemap,
     Pa2_tilemap = bonusTilemap,
-    Pa2_tileTable = createTileTable(bonusTilemap, 2, 5, 3),
     Pa1_tileTable = createTileTable(overworldTilemap, 1, 9, 8),
+    Pa2_tileTable = createTileTable(bonusTilemap, 2, 5, 3),
 
     -- Metadata.
     name = "Homescreen Level", 
