@@ -25,6 +25,7 @@ function love.draw()
 end
 
 function love.update(dt) 
+	--require("lovebird").update()
 	if GAME_STATE == "HomeScreen" then
 		runHomeScreen(dt)
 	elseif GAME_STATE == "editor" then

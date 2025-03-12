@@ -29,6 +29,7 @@ end
 function getCurrentTileTable() return levelEditorLevel["Pa"..tostring(editing_palette).."_tileTable"] end
 
 
+placingGridQuadrant = 1
 
 function drawEditor()
     love.graphics.setColor(1, 1, 1, 1)
@@ -56,7 +57,7 @@ function drawEditor()
         love.graphics.setColor(1, 1, 1, 0.5) -- 50% transparent
         
         if love.mouse.isDown(1) then
-            drawTileSquare(currentTilemap, currentTileTable.tiles[getTile(currentTileTable, currentTile[1], currentTile[2])], (initialMouseX-1) / 16, (initialMouseY-1) / 16, (((finalMouseX-1) / 16) - (initialMouseX-1)/16) + 1, (((finalMouseY-1) / 16) - (initialMouseY -1)/16) + 1)
+            drawTileSquare(currentTilemap, currentTileTable.tiles[getTile(currentTileTable, currentTile[1], currentTile[2])], getQuadrantPlacingShit(placingGridQuadrant))
         else
             love.graphics.draw(currentTilemap, currentTileTable.tiles[getTile(currentTileTable, currentTile[1], currentTile[2])], mousePosition())
         end
@@ -83,7 +84,9 @@ initialMouseY = 1
 finalMouseX = 2
 finalMouseY = 2
 function runEditor(dt)
+
     if love.mouse.isDown(1) then
+        gridQuadrantMath()
         finalMouseX, finalMouseY = mousePosition()
     end
 end
@@ -91,10 +94,52 @@ end
 function EDITOR_PLACE()
     local PaNo = levelEditorLevel.Pa[editing_palette]
     local layer = PaNo[editing_layer]
-    if finalMouseX > initialMouseX and finalMouseY > initialMouseY then
-        table.insert(layer.squares, {currentTile[1], currentTile[2], (initialMouseX-1) / 16, (initialMouseY-1) / 16, (((finalMouseX-1) / 16) - (initialMouseX-1)/16) + 1, (((finalMouseY-1) / 16) - (initialMouseY -1)/16) + 1})
+    table.insert(layer.squares, {currentTile[1], currentTile[2], getQuadrantPlacingShit(placingGridQuadrant)})
+end
+
+function gridQuadrantMath()
+    if finalMouseY > initialMouseY or finalMouseY < initialMouseY and finalMouseX > initialMouseX or finalMouseX < initialMouseX then
+        if finalMouseX > initialMouseX and finalMouseY > initialMouseY then
+            placingGridQuadrant = 1
+        elseif finalMouseX < initialMouseX and finalMouseY > initialMouseY then
+            placingGridQuadrant = 2
+        elseif finalMouseX < initialMouseX and finalMouseY < initialMouseY then
+            placingGridQuadrant = 3
+        elseif finalMouseX > initialMouseX and finalMouseY < initialMouseY then
+            placingGridQuadrant = 4
+        end
+    elseif finalMouseX == initialMouseX then -- bar of tiles on the Y
+        -- there may seem like there's duplicates here but the powers that be require it
+        if finalMouseY > initialMouseY then
+            placingGridQuadrant = 1
+        elseif finalMouseY > initialMouseY then
+            placingGridQuadrant = 2
+        elseif finalMouseY < initialMouseY then
+            placingGridQuadrant = 3
+        elseif finalMouseY < initialMouseY then
+            placingGridQuadrant = 4
+        end
+    else -- if it's just a bar of tiles on the X
+        if finalMouseX > initialMouseX then
+            placingGridQuadrant = 1
+        elseif finalMouseX > initialMouseX then
+            placingGridQuadrant = 2
+        elseif finalMouseX < initialMouseX then
+            placingGridQuadrant = 3
+        elseif finalMouseX < initialMouseX then
+            placingGridQuadrant = 4
+        end
     end
 end
+
+function getQuadrantPlacingShit(quadrant)
+    if quadrant == 1 then return (initialMouseX-1) / 16, (initialMouseY-1) / 16, (((finalMouseX-1) / 16) - (initialMouseX-1)/16) + 1, (((finalMouseY-1) / 16) - (initialMouseY -1)/16) + 1
+    elseif quadrant == 3 then return (finalMouseX-1) / 16, (finalMouseY-1) / 16, (((initialMouseX-1) / 16) - (finalMouseX-1)/16) + 1, (((initialMouseY-1) / 16) - (finalMouseY -1)/16) + 1 -- direct opposite, easier
+    elseif quadrant == 2 then return (finalMouseX-1) / 16, (initialMouseY-1) / 16, (((initialMouseX-1) / 16) - (finalMouseX-1)/16) + 1, (((finalMouseY-1) / 16) - (initialMouseY -1)/16) + 1
+    elseif quadrant == 4 then return (initialMouseX-1) / 16, (finalMouseY-1) / 16, (((finalMouseX-1) / 16) - (initialMouseX-1)/16) + 1, (((initialMouseY-1) / 16) - (finalMouseY -1)/16) + 1
+    end
+end
+
 
 function LEVEL_EDITOR_FINALIZE() -- saves our level to a file
 end
