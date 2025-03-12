@@ -91,9 +91,9 @@ end
 function EDITOR_PLACE()
     local PaNo = levelEditorLevel.Pa[editing_palette]
     local layer = PaNo[editing_layer]
-    
-    table.insert(layer.squares, {currentTile[1], currentTile[2], (initialMouseX-1) / 16, (initialMouseY-1) / 16, (((finalMouseX-1) / 16) - (initialMouseX-1)/16) + 1, (((finalMouseY-1) / 16) - (initialMouseY -1)/16) + 1})
-    --initialMouseX, initialMouseY, finalMouseX, finalMouseY = 0
+    if finalMouseX > initialMouseX and finalMouseY > initialMouseY then
+        table.insert(layer.squares, {currentTile[1], currentTile[2], (initialMouseX-1) / 16, (initialMouseY-1) / 16, (((finalMouseX-1) / 16) - (initialMouseX-1)/16) + 1, (((finalMouseY-1) / 16) - (initialMouseY -1)/16) + 1})
+    end
 end
 
 function LEVEL_EDITOR_FINALIZE() -- saves our level to a file
