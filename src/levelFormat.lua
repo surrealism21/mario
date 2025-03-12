@@ -21,6 +21,7 @@ level = {
                 squares = {
                     -- FORMAT: 1-2: getTile function, 3: x 4: y 5: width 6: height
                     {1, 1, 0, 15, 30, 2},
+                    --{1, 1, 1, 1, 2, 2},
                 },
                 structures = {
                     -- Same as a normal call of the render function but without required tilemap, that is done by weird globals that do weird things

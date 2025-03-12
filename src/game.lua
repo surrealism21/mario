@@ -1,11 +1,9 @@
 require("atlas")
 require("levelFormat")
-require("editor")
 
 
 -- Home's new screens
 cursorSettings = 1
-GAME_STATE = "HomeScreen"
 function drawHomeScreen()
     -- graphics
     local logo = love.graphics.newImage("assets/logo.png")
@@ -18,12 +16,6 @@ function drawHomeScreen()
     -- tiles decorations
     tileX = 1
     tileY = 1
-    --drawTileSquare(CURRENT_tileTable.tiles[getTile(2, 1)], 0, 15, 30, 2)
-    --drawAssembledStructure(BigHill, 0, 12)
-    --drawAssembledStructure(ThreeBush, overworld, 7, 14)
-    --drawLevelTable(titlescreen, tilemap, overworld)
-    --local pa1 = level.Pa[1]
-    --drawTable(Pa1_tilemap, Pa1_tileTable, pa1[1])
     drawLevelFile(level)
 
     -- title
@@ -44,16 +36,6 @@ function runHomeScreen(dt)
 end
 
 function loadHomeScreen()
+    GAME_STATE = "HomeScreen"
     prepareLevelCollisionTable(titlescreen)
-end
-
-function love.keypressed(key, scancode, isrepeat)
-    if key == "up" then
-        cursorSettings = 1
-    elseif key == "down" then
-        cursorSettings = 2
-    elseif key == "l" then 
-        GAME_STATE = "editor"
-        LEVEL_EDITOR_SETUP(titlescreen)
-    end
 end

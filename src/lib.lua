@@ -6,18 +6,34 @@ function cRGB(red, green, blue) -- alpha shouldn't really be needed since this i
     return (red / 255), (green / 255), (blue / 255)
 end
 
--- "Scale for screen" fucks with love.graphics.scale in order to retain to the user's needs without us having any Garbages.
+
+
+function ScaleForScreen()
+    love.graphics.scale(getScreenScaleFactors())
+end
+
+-- "get scale factors" calculates scale factors
 -- we're already scaling it up 4 times so this is probably fucking horseshit
 
-function ScaleForScreen() -- 1920 x 1080 is the cool base, aka my computer. There's it's 4x scale required.
+function getScreenScaleFactors()
     local width, height = love.window.getDesktopDimensions()
-    local VW, VH = 1920, 1080 -- assuming you actually have a typical monitor Lmfao
     local gameW, gameH = 480, 270
+    local WFactor, HFactor = 4
     WFactor = width / gameW
     HFactor = height / gameH
-    love.graphics.scale(WFactor, HFactor)
+
+    return WFactor, HFactor
+end -- that was really clean, actually.
+
+function round16(num)
+    -- Make it an integer first
+    num = math.floor(num + 0.5)
+    -- Round to nearest 16
+	num = math.floor(num / 16 + 0.5) * 16
+    return num
 end
--- that was really clean, actually.
+
+-- Tables area
 
 function table.clone(org)
     return {unpack(org)}
@@ -33,9 +49,11 @@ function tablelength(T)
     end
 end
 
+-- junk i'll use soon
+
 function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
     return x1 < x2+w2 and
            x2 < x1+w1 and
            y1 < y2+h2 and
            y2 < y1+h1
-  end
+end
