@@ -57,3 +57,11 @@ function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
            y1 < y2+h2 and
            y2 < y1+h1
 end
+
+function checkBoundingBoxAndXY(x1,y1,w1,h1, x2,y2)
+    if x2 > x1 and x2 < x1+w1 and y2 > y1 and y2 < y1+h1 then
+        return true
+    else
+        return false
+    end
+end
