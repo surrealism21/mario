@@ -34,6 +34,7 @@ function getCurrentTileTable() return levelEditorLevel["Pa"..tostring(editing_pa
 placingGridQuadrant = 1
 
 function drawEditor()
+    editorScrollingDraw()
     love.graphics.setColor(1, 1, 1, 1)
     for Pa = 1, tablelength(levelEditorLevel.Pa) do
         local currentTilemap = levelEditorLevel["Pa"..tostring(Pa).."_tilemap"]
@@ -152,12 +153,37 @@ function EDITOR_SELECT()
     if currentSystem == "tilemap" then
         local PaNo = levelEditorLevel.Pa[editing_palette]
         local layer = PaNo[editing_layer]
-        for squareCheck = 1, tablelength(layer.squares) do
-            local squareTable = layer.squares[squareCheck]
-            if checkBoundingBoxAndXY(squareTable[3], squareTable[4], squareTable[5], squareTable[6], mx/16, my/16) == true then
-                -- yeah for now this just deletes it, selection to morrow
-                layer.squares[squareCheck] = nil
+        for i, v in pairs(layer.squares) do
+            local squareTable = layer.squares[i]
+            if squareTable ~= nil then
+                if checkBoundingBoxAndXY(squareTable[3], squareTable[4], squareTable[5], squareTable[6], mx/16, my/16) == true then
+                    -- yeah for now this just deletes it, selection to morrow
+                    layer.squares[i] = nil
+                end
             end
         end
     end
 end
+
+
+-- Camera
+tx=0
+ty=0
+function editorScrollingDraw()
+	mx = love.mouse.getX()
+	my = love.mouse.getY()
+	if love.mouse.isDown(3) then
+		if not mouse_pressed then
+			mouse_preslsed = true
+			dx = tx-mx
+			dy = ty-my
+		else
+			tx = mx+dx
+			ty = my+dy
+		end
+	elseif mouse_pressed then
+		mouse_pressed = false
+	end
+	love.graphics.translate(tx, ty)
+end
+

@@ -178,21 +178,21 @@ end
 
 function drawTable(Pa_tilemap, Pa_tileTable, level) -- Draws a whole table...
     --First we draw squares!
-    for currentSquare = 1, tablelength(level.squares) do
-        local square = level.squares[currentSquare]
+    for i, v in pairs(level.squares) do
+        local square = level.squares[i]
         drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTile(Pa_tileTable, square[1], square[2])], square[3], square[4], square[5], square[6])
     end
     -- now for the prefabs
     if tablelength(level.structures) ~= nil then
-        for currentStruct = 1, tablelength(level.structures) do
-            local structure = level.structures[currentStruct]
+        for i, v in pairs(level.structures) do
+            local structure = level.structures[i]
             drawAssembledStructure(Pa_tileTable, structure[1], structure[2], structure[3])
         end
     end
     -- 9 patches
     if tablelength(level.ninePatches) ~= nil then
-        for currentPatch = 1, tablelength(level.ninePatches) do
-            local patch = level.ninePatches[currentPatch]
+        for i, v in pairs(level.ninePatches) do
+            local patch = level.ninePatches[i]
             render9patch(Pa_tilemap, Pa_tileTable, patch[1], patch[2], patch[3], patch[4], patch[5])
         end
     end
