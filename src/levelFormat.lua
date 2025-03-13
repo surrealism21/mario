@@ -8,8 +8,8 @@ level = {
     -- Tilesets.
     Pa1_tilemap = overworldTilemap,
     Pa2_tilemap = bonusTilemap,
-    Pa1_tileTable = createTileTable(overworldTilemap, 1, 9, 8),
-    Pa2_tileTable = createTileTable(bonusTilemap, 2, 5, 3),
+    Pa1_tileTable = createTileTable(overworldTilemap, 1, 9, 8, 16, 16),
+    Pa2_tileTable = createTileTable(bonusTilemap, 2, 5, 3, 16, 16),
 
     -- Metadata.
     name = "Homescreen Level", 
@@ -27,7 +27,21 @@ level = {
                     {BigHill, 0, 12}, {ThreeBush, 7, 14},
                 },
                 ninePatches = {
-                    -- Same as normal call without tilemap.
+
+                },
+            },
+        },
+        {
+            {
+                squares = {
+
+                },
+                structures = {
+
+                },
+                ninePatches = {
+                    {bonus9Patch, 0, 3, 30, 2},
+                    {bonus9Patch, 1, 2, 4, 4},
                 },
             },
         },

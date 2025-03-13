@@ -67,7 +67,7 @@ overworldTilemap = love.graphics.newImage("assets/atlas/standard-overworld.png")
 bonusTilemap = love.graphics.newImage("assets/atlas/bonus.png")
 
 -- Makes a tile table for a tilemap image. Designed for using any tileset pretty much out of the box. Written from scratch actually
-function createTileTable(image, spacing, width, height)
+function createTileTable(image, spacing, width, height, tileWidth, tileHeight)
     local tableTile = {
         metadata = {}, -- Metadata table for height & width information and such
         tiles = {}, -- Tile quads
@@ -78,12 +78,14 @@ function createTileTable(image, spacing, width, height)
     table.insert(tableTile.metadata, height) -- tiles high
     table.insert(tableTile.metadata, width*height) -- total number of tiles
     table.insert(tableTile.metadata, image) -- image the tiles use
+    table.insert(tableTile.metadata, tileWidth)
+    table.insert(tableTile.metadata, tileHeight)
 
     for yTile = 0, height do 
         for xTile = 0, width do
             -- Ok now we get the pos
-            xPos = (xTile * 16) + (xTile*spacing)
-            yPos = (yTile * 16) + (yTile*spacing)
+            xPos = (xTile * tileWidth) + (xTile*spacing)
+            yPos = (yTile * tileHeight) + (yTile*spacing)
             -- Ok now we insert in TABLE's tile section
             table.insert(tableTile.tiles, love.graphics.newQuad(xPos, yPos, 16, 16, image))
         end
@@ -98,10 +100,10 @@ function getTile(Pa_tileTable, tileX, tileY) return (Pa_tileTable.metadata[1] * 
 function getTileCoordPair(Pa_tileTable, tilePos) return (Pa_tileTable.metadata[1] * (tilePos[2] - 1)) + (tilePos[1] + (tilePos[2] - 1))  end
 
 -- Draw a square of tiles with loops
-function drawTileSquare(Pa_tilemap, tileQuad, x, y, width, height)
+function drawTileSquare(Pa_tilemap, tileTable, tileQuad, x, y, width, height)
     for current_y = 1, height do
         for current_x = 1, width do
-            love.graphics.draw(Pa_tilemap, tileQuad, ((x-1)*16)+(current_x*16), ((y-1)*16)+(current_y*16))
+            love.graphics.draw(Pa_tilemap, tileQuad, ((x-1)*tileTable.metadata[5])+(current_x*tileTable.metadata[5]), ((y-1)*tileTable.metadata[6])+(current_y*tileTable.metadata[6]))
         end
     end
 end
@@ -180,7 +182,7 @@ function drawTable(Pa_tilemap, Pa_tileTable, level) -- Draws a whole table...
     --First we draw squares!
     for i, v in pairs(level.squares) do
         local square = level.squares[i]
-        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTile(Pa_tileTable, square[1], square[2])], square[3], square[4], square[5], square[6])
+        drawTileSquare(Pa_tilemap, Pa_tileTable, Pa_tileTable.tiles[getTile(Pa_tileTable, square[1], square[2])], square[3], square[4], square[5], square[6])
     end
     -- now for the prefabs
     if tablelength(level.structures) ~= nil then
@@ -212,32 +214,32 @@ bonus9Patch = {
 
 function render9patch(Pa_tilemap, Pa_tileTable, ninePatch, x, y, width, height) 
     -- Okay, first corner.
-    love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[1])], x*16, y*16)
+    love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[1])], x*Pa_tileTable.metadata[5], y*Pa_tileTable.metadata[6])
     -- Okay, now we do the width here're
     if width > 2 then
-        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[2])], x+1, y, width-2, 1)
+        drawTileSquare(Pa_tilemap, Pa_tileTable, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[2])], x+1, y, width-2, 1)
     end
     -- 3rd thing
-    love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[3])], (x+width-1)*16, y*16)
+    love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[3])], (x+width-1)*Pa_tileTable.metadata[5], y*Pa_tileTable.metadata[6])
     -- I'm left high
     if height > 2 then
-        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[4])], x, y+1, 1, height-2)
+        drawTileSquare(Pa_tilemap, Pa_tileTable, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[4])], x, y+1, 1, height-2)
     end
     -- Right thing whatever i'm deatg
     if height > 2 then
-        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[6])], x+width-1, y+1, 1, height-2)
+        drawTileSquare(Pa_tilemap, Pa_tileTable, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[6])], x+width-1, y+1, 1, height-2)
     end
     -- bottom to the Fuckking... left
-    love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[7])], x*16, ((y-1)*16)+(height*16))
+    love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[7])], x*Pa_tileTable.metadata[5], ((y-1)*Pa_tileTable.metadata[6])+(height*Pa_tileTable.metadata[6]))
     -- Bot. width
     if width > 2 then
-        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[8])], x+1, y+height-1, width-2, 1)
+        drawTileSquare(Pa_tilemap, Pa_tileTable, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[8])], x+1, y+height-1, width-2, 1)
     end
     -- this code documentation is so good
-    love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[9])], (x+width-1)*16, ((y-1)*16)+(height*16))
+    love.graphics.draw(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[9])], (x+width-1)*Pa_tileTable.metadata[5], ((y-1)*Pa_tileTable.metadata[6])+(height*Pa_tileTable.metadata[6]))
     -- Middle: this must be last so I can make excuse to not make auto-tiling
     if width > 2 and height > 2 then
-        drawTileSquare(Pa_tilemap, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[5])], x+1, y+1, width-2, height-2)
+        drawTileSquare(Pa_tilemap, Pa_tileTable, Pa_tileTable.tiles[getTileCoordPair(Pa_tileTable, ninePatch[5])], x+1, y+1, width-2, height-2)
     end
 end
 

@@ -23,6 +23,8 @@ function LEVEL_EDITOR_SETUP(LEVEL_NAME)
     levelEditorLevel = LEVEL_NAME
     show_layer = {true, true, true}
     editing_palette = 1
+    editing_palette_tileTable = levelEditorLevel["Pa"..tostring(editing_palette).."_tileTable"]
+    editing_palette_tilemap = levelEditorLevel["Pa"..tostring(editing_palette).."_tilemap"]
     editing_layer = 1
     currentTile = {1, 1}
 end
@@ -61,9 +63,9 @@ function drawEditor()
             love.graphics.setColor(1, 1, 1, 0.5) -- 50% transparent
             
             if love.mouse.isDown(2) then
-                drawTileSquare(currentTilemap, currentTileTable.tiles[getTile(currentTileTable, currentTile[1], currentTile[2])], getQuadrantPlacingShit(placingGridQuadrant))
+                drawTileSquare(editing_palette_tilemap, editing_palette_tileTable, editing_palette_tileTable.tiles[getTile(editing_palette_tileTable, currentTile[1], currentTile[2])], getQuadrantPlacingShit(placingGridQuadrant))
             else
-                love.graphics.draw(currentTilemap, currentTileTable.tiles[getTile(currentTileTable, currentTile[1], currentTile[2])], mousePosition())
+                love.graphics.draw(editing_palette_tilemap, editing_palette_tileTable.tiles[getTile(editing_palette_tileTable, currentTile[1], currentTile[2])], mousePosition())
             end
             love.graphics.setColor(1, 1, 1, 1) 
         end
