@@ -23,9 +23,8 @@ function love.mousepressed(x, y, button, istouch, presses)
                 initialMouseX, initialMouseY = mousePosition()
             end
         elseif button == 1 then
-            if currentSystem == "tilemap" then
-                EDITOR_SELECT()
-            end
+            lastSystem = currentSystem
+            EDITOR_CLICK()
         end
     end
 end

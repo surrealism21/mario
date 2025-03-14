@@ -55,20 +55,6 @@ function drawEditor()
         if PaNo[3] ~= nil and show_layer[3] == true then
             drawTable(currentTilemap, currentTileTable, PaNo[3])
         end
-
-        if currentSystem == "tilemap" then
-            -- Preview tiles shit
-
-            -- actually draw the tile
-            love.graphics.setColor(1, 1, 1, 0.5) -- 50% transparent
-            
-            if love.mouse.isDown(2) then
-                drawTileSquare(editing_palette_tilemap, editing_palette_tileTable, editing_palette_tileTable.tiles[getTile(editing_palette_tileTable, currentTile[1], currentTile[2])], getQuadrantPlacingShit(placingGridQuadrant))
-            else
-                love.graphics.draw(editing_palette_tilemap, editing_palette_tileTable.tiles[getTile(editing_palette_tileTable, currentTile[1], currentTile[2])], mousePosition())
-            end
-            love.graphics.setColor(1, 1, 1, 1) 
-        end
     end
 
     -- begin buttons
@@ -77,12 +63,58 @@ function drawEditor()
     love.graphics.print("initial mouse pos: "..tostring(initialMouseX / 16)..", "..tostring(initialMouseY / 16), 0, 30, 0, 0.25, 0.25)
     love.graphics.print("final mouse pos: "..tostring(finalMouseX / 16)..", "..tostring(finalMouseY / 16), 0, 50, 0, 0.25, 0.25)
 
+    -- UI's
+    if tilePaletteShow == true then
+        love.graphics.draw(editing_palette_tilemap, 0, 32 / 2, 0, 1, 1)
+    end
+
+    if currentSystem == "tilemap" then
+        love.mouse.setVisible(false)
+        -- Preview tiles shit
+
+        -- actually draw the tile
+        love.graphics.setColor(1, 1, 1, 0.5) -- 50% transparent
+        
+        if not love.mouse.isDown(2) then
+            love.graphics.draw(editing_palette_tilemap, editing_palette_tileTable.tiles[getTile(editing_palette_tileTable, currentTile[1], currentTile[2])], mousePosition())
+        else
+            drawTileSquare(editing_palette_tilemap, editing_palette_tileTable, editing_palette_tileTable.tiles[getTile(editing_palette_tileTable, currentTile[1], currentTile[2])], getQuadrantPlacingShit(placingGridQuadrant))
+        end
+        love.graphics.setColor(1, 1, 1, 1) 
+    elseif currentSystem == "picker" then
+        love.mouse.setVisible(true)
+    end
 end
 
 -- tile palette button. At 0,0
 paletteButton = love.graphics.newImage("assets/buttons/palette.png")
+tilePaletteShow = false
+function EDITOR_CLICK()
+    paletteButtonLocale = {
+        x = 0,
+        y = 0,
+        width = (paletteButton:getWidth() / 2) * WFactor,
+        height = (paletteButton:getHeight() / 2) * HFactor,
+    }
+    tilemapLocale = {
+        x = 0,
+        y = 32 / 2,
+        width = (editing_palette_tilemap:getWidth()) * WFactor,
+        height = (editing_palette_tilemap:getHeight()) * HFactor,
+    }
+    if checkBoundingBoxAndXY(paletteButtonLocale.x, paletteButtonLocale.y, paletteButtonLocale.width, paletteButtonLocale.height, love.mouse.getPosition()) then
+        if tilePaletteShow == false then
+            tilePaletteShow = true
+            currentSystem = "picker"
+        else 
+            tilePaletteShow = false
+            currentSystem = "tilemap"
+        end
+    elseif checkBoundingBoxAndXY(tilemapLocale.x, tilemapLocale.y, tilemapLocale.width, tilemapLocale.height, love.mouse.getPosition()) then
 
-function tilePaletteShow()
+    else 
+        EDITOR_SELECT()
+    end
 end
 
 -- Related to placing tiles
@@ -142,10 +174,10 @@ function gridQuadrantMath()
 end
 
 function getQuadrantPlacingShit(quadrant)
-    if quadrant == 1 then return (initialMouseX-1) / 16, (initialMouseY-1) / 16, (((finalMouseX-1) / 16) - (initialMouseX-1)/16) + 1, (((finalMouseY-1) / 16) - (initialMouseY -1)/16) + 1
-    elseif quadrant == 3 then return (finalMouseX-1) / 16, (finalMouseY-1) / 16, (((initialMouseX-1) / 16) - (finalMouseX-1)/16) + 1, (((initialMouseY-1) / 16) - (finalMouseY -1)/16) + 1 -- direct opposite, easier
-    elseif quadrant == 2 then return (finalMouseX-1) / 16, (initialMouseY-1) / 16, (((initialMouseX-1) / 16) - (finalMouseX-1)/16) + 1, (((finalMouseY-1) / 16) - (initialMouseY -1)/16) + 1
-    elseif quadrant == 4 then return (initialMouseX-1) / 16, (finalMouseY-1) / 16, (((finalMouseX-1) / 16) - (initialMouseX-1)/16) + 1, (((initialMouseY-1) / 16) - (finalMouseY -1)/16) + 1
+    if quadrant == 1 then return (initialMouseX) / 16, (initialMouseY) / 16, (((finalMouseX) / 16) - (initialMouseX)/16), (((finalMouseY) / 16) - (initialMouseY)/16)
+    elseif quadrant == 3 then return (finalMouseX) / 16, (finalMouseY) / 16, (((initialMouseX) / 16) - (finalMouseX)/16), (((initialMouseY) / 16) - (finalMouseY)/16) -- direct opposite, easier
+    elseif quadrant == 2 then return (finalMouseX) / 16, (initialMouseY) / 16, (((initialMouseX) / 16) - (finalMouseX)/16), (((finalMouseY) / 16) - (initialMouseY)/16)
+    elseif quadrant == 4 then return (initialMouseX) / 16, (finalMouseY) / 16, (((finalMouseX) / 16) - (initialMouseX)/16), (((initialMouseY) / 16) - (finalMouseY)/16)
     end
 end
 
@@ -158,7 +190,7 @@ function EDITOR_SELECT()
         for i, v in pairs(layer.squares) do
             local squareTable = layer.squares[i]
             if squareTable ~= nil then
-                if checkBoundingBoxAndXY(squareTable[3], squareTable[4], squareTable[5], squareTable[6], mx/16, my/16) == true then
+                if checkBoundingBoxAndXY(squareTable[3]-1, squareTable[4]-1, squareTable[5]+1, squareTable[6]+1, (mx/16), (my/16)) == true then
                     -- yeah for now this just deletes it, selection to morrow
                     layer.squares[i] = nil
                 end
