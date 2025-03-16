@@ -1,5 +1,4 @@
 require("atlas")
-require("level")
 require("lib")
 require("game")
 
@@ -42,10 +41,13 @@ function drawEditor()
         local currentTilemap = levelEditorLevel["Pa"..tostring(Pa).."_tilemap"]
         local currentTileTable = levelEditorLevel["Pa"..tostring(Pa).."_tileTable"]
         local PaNo = levelEditorLevel.Pa[Pa]
-
+        
         -- Draw layer 1
         if PaNo[1] ~= nil and show_layer[1] == true then
             drawTable(currentTilemap, currentTileTable, PaNo[1])
+            for i, v in pairs(levelEditorLevel.Pa[1][1].squares) do
+                love.graphics.rectangle("line", v[3]*16, v[4]*16, v[5]*16, v[6]*16)
+            end
         end
         -- Draw layer 2
         if PaNo[2] ~= nil and show_layer[2] == true then
@@ -60,8 +62,8 @@ function drawEditor()
     -- begin buttons
     love.graphics.draw(paletteButton, 0, 0, 0, 0.5, 0.5)
     -- other
-    love.graphics.print("initial mouse pos: "..tostring(initialMouseX / 16)..", "..tostring(initialMouseY / 16), 0, 30, 0, 0.25, 0.25)
-    love.graphics.print("final mouse pos: "..tostring(finalMouseX / 16)..", "..tostring(finalMouseY / 16), 0, 50, 0, 0.25, 0.25)
+    local mx, my = mousePosition()
+    love.graphics.print("mouse pos: "..tostring(mx)..", "..tostring(my), 0, 30, 0, 0.25, 0.25)
 
     -- UI's
     if tilePaletteShow == true then
@@ -84,12 +86,16 @@ function drawEditor()
     elseif currentSystem == "picker" then
         love.mouse.setVisible(true)
     end
+    love.graphics.setColor(1, 0, 0, 1)
+    mx, my = mousePosition()
+    love.graphics.rectangle("line", mx, my, 16, 16)
 end
 
 -- tile palette button. At 0,0
 paletteButton = love.graphics.newImage("assets/buttons/palette.png")
 tilePaletteShow = false
 function EDITOR_CLICK()
+    mx, my = mousePosition()
     paletteButtonLocale = {
         x = 0,
         y = 0,
@@ -102,7 +108,7 @@ function EDITOR_CLICK()
         width = (editing_palette_tilemap:getWidth()) * WFactor,
         height = (editing_palette_tilemap:getHeight()) * HFactor,
     }
-    if checkBoundingBoxAndXY(paletteButtonLocale.x, paletteButtonLocale.y, paletteButtonLocale.width, paletteButtonLocale.height, love.mouse.getPosition()) then
+    if CheckCollision(paletteButtonLocale.x, paletteButtonLocale.y, paletteButtonLocale.width, paletteButtonLocale.height, mx, my, 16, 16) then
         if tilePaletteShow == false then
             tilePaletteShow = true
             currentSystem = "picker"
@@ -110,8 +116,8 @@ function EDITOR_CLICK()
             tilePaletteShow = false
             currentSystem = "tilemap"
         end
-    elseif checkBoundingBoxAndXY(tilemapLocale.x, tilemapLocale.y, tilemapLocale.width, tilemapLocale.height, love.mouse.getPosition()) then
-
+    --elseif CheckCollision(tilemapLocale.x, tilemapLocale.y, tilemapLocale.width, tilemapLocale.height, mx, my, 16, 16) then
+        -- Do other things.
     else 
         EDITOR_SELECT()
     end
@@ -149,35 +155,18 @@ function gridQuadrantMath()
         elseif finalMouseX > initialMouseX and finalMouseY < initialMouseY then
             placingGridQuadrant = 4
         end
-    elseif finalMouseX == initialMouseX then -- bar of tiles on the Y
-        -- there may seem like there's duplicates here but the powers that be require it
-        if finalMouseY > initialMouseY then
-            placingGridQuadrant = 1
-        elseif finalMouseY > initialMouseY then
-            placingGridQuadrant = 2
-        elseif finalMouseY < initialMouseY then
-            placingGridQuadrant = 3
-        elseif finalMouseY < initialMouseY then
-            placingGridQuadrant = 4
-        end
-    else -- if it's just a bar of tiles on the X
-        if finalMouseX > initialMouseX then
-            placingGridQuadrant = 1
-        elseif finalMouseX > initialMouseX then
-            placingGridQuadrant = 2
-        elseif finalMouseX < initialMouseX then
-            placingGridQuadrant = 3
-        elseif finalMouseX < initialMouseX then
-            placingGridQuadrant = 4
-        end
+    end
+    if finalMouseY == initialMouseY and finalMouseX == initialMouseX then
+        placingGridQuadrant = 5 -- Evil single tile quadrant
     end
 end
 
 function getQuadrantPlacingShit(quadrant)
-    if quadrant == 1 then return (initialMouseX) / 16, (initialMouseY) / 16, (((finalMouseX) / 16) - (initialMouseX)/16), (((finalMouseY) / 16) - (initialMouseY)/16)
-    elseif quadrant == 3 then return (finalMouseX) / 16, (finalMouseY) / 16, (((initialMouseX) / 16) - (finalMouseX)/16), (((initialMouseY) / 16) - (finalMouseY)/16) -- direct opposite, easier
-    elseif quadrant == 2 then return (finalMouseX) / 16, (initialMouseY) / 16, (((initialMouseX) / 16) - (finalMouseX)/16), (((finalMouseY) / 16) - (initialMouseY)/16)
-    elseif quadrant == 4 then return (initialMouseX) / 16, (finalMouseY) / 16, (((finalMouseX) / 16) - (initialMouseX)/16), (((initialMouseY) / 16) - (finalMouseY)/16)
+    if quadrant == 1 then return ((initialMouseX) / 16), ((initialMouseY) / 16), (((finalMouseX) / 16) - (initialMouseX)/16), (((finalMouseY) / 16) - (initialMouseY)/16)
+    elseif quadrant == 3 then return ((finalMouseX) / 16)+1, ((finalMouseY) / 16)+1, (((initialMouseX) / 16) - (finalMouseX)/16), (((initialMouseY) / 16) - (finalMouseY)/16) -- direct opposite, easier
+    elseif quadrant == 2 then return ((finalMouseX) / 16)+1, ((initialMouseY) / 16), (((initialMouseX) / 16) - (finalMouseX)/16), (((finalMouseY) / 16) - (initialMouseY)/16)
+    elseif quadrant == 4 then return ((initialMouseX) / 16), ((finalMouseY) / 16)+1, (((finalMouseX) / 16) - (initialMouseX)/16), (((initialMouseY) / 16) - (finalMouseY)/16)
+    elseif quadrant == 5 then return initialMouseX / 16, initialMouseY / 16, 1, 1
     end
 end
 
@@ -189,11 +178,9 @@ function EDITOR_SELECT()
         local layer = PaNo[editing_layer]
         for i, v in pairs(layer.squares) do
             local squareTable = layer.squares[i]
-            if squareTable ~= nil then
-                if checkBoundingBoxAndXY(squareTable[3]-1, squareTable[4]-1, squareTable[5]+1, squareTable[6]+1, (mx/16), (my/16)) == true then
-                    -- yeah for now this just deletes it, selection to morrow
-                    layer.squares[i] = nil
-                end
+            if CheckCollision((squareTable[3]*16), (squareTable[4]*16), (squareTable[5]*16), (squareTable[6]*16), mx, my, 16, 16) then
+                -- yeah for now this just deletes it, selection to morrow
+                layer.squares[i] = nil
             end
         end
     end

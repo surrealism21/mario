@@ -165,6 +165,7 @@ BigHill = {
 }
 
 -- Let's do collider prep now
+--[[
 
 function prepareLevelCollisionTable(level)
     local collisionTable = {}
@@ -177,6 +178,7 @@ function prepareLevelCollisionTable(level)
     end
     return collisionTable
 end
+]]
 
 function drawTable(Pa_tilemap, Pa_tileTable, level) -- Draws a whole table...
     --First we draw squares!

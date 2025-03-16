@@ -38,3 +38,11 @@ function love.mousereleased(x, y, button, istouch, presses)
         end
     end
 end
+
+function love.wheelmoved(x, y)
+    if y > 0 then
+        currentTile[1] = currentTile[1] + 1
+    elseif y < 0 then
+        currentTile[1] = currentTile[1] - 1
+    end
+end

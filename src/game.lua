@@ -37,5 +37,4 @@ end
 
 function loadHomeScreen()
     GAME_STATE = "HomeScreen"
-    prepareLevelCollisionTable(titlescreen)
 end
