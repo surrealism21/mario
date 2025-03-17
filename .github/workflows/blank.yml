@@ -26,5 +26,5 @@ jobs:
       - name: Build bare love package
         uses: love-actions/love-actions-core@v1
         with:
-          build-list: ./src/
-          package-path: ./bare/mario.love
+          build-list: /src/
+          package-path: /bare/mario.love
