@@ -1,4 +1,4 @@
-- name: Build bare love package
+  - name: pkg
   uses: love-actions/love-actions-core@v1
   with:
     build-list: ./src/
