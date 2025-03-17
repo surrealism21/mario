@@ -1,5 +1,0 @@
-- name: pkg
-  uses: love-actions/love-actions-core@v1
-  with:
-    build-list: ./assets/ ./frameworks/ ./config.lua ./main.lua
-    package-path: ./bare/my_game.love
