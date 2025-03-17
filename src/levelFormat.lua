@@ -42,8 +42,8 @@ level = {
 
                 },
                 ninePatches = {
-                    {bonus9Patch, 0, 3, 30, 2},
-                    {bonus9Patch, 1, 2, 4, 4},
+                    --{bonus9Patch, 0, 3, 30, 2},
+                    --{bonus9Patch, 1, 2, 4, 4},
                 },
             },
         },
