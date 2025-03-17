@@ -1,3 +1,5 @@
+require("spriteSystem")
+require("animatedSprite")
 -- EXAMPLE of the level format.
 
 -- This file serves as a level.
@@ -45,5 +47,17 @@ level = {
                 },
             },
         },
+    },
+    Sprites = {
+        {
+            -- Sprite type. IMPORTANT.
+            type = "Logo3",
+            -- Animation metadata. If this is missing, nothing happens
+            animationType = "linear",
+            animation = Logo3Animation,
+            -- Location information
+            x = 10,
+            y = 10,
+        }
     },
 }

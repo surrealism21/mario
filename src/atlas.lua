@@ -87,7 +87,7 @@ function createTileTable(image, spacing, width, height, tileWidth, tileHeight)
             xPos = (xTile * tileWidth) + (xTile*spacing)
             yPos = (yTile * tileHeight) + (yTile*spacing)
             -- Ok now we insert in TABLE's tile section
-            table.insert(tableTile.tiles, love.graphics.newQuad(xPos, yPos, 16, 16, image))
+            table.insert(tableTile.tiles, love.graphics.newQuad(xPos, yPos, tileWidth, tileHeight, image))
         end
     end
     return tableTile
