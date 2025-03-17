@@ -19,12 +19,15 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./src
+    
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
       - name: Build bare love package
         uses: love-actions/love-actions-core@v1
         with:
-          build-list: src
+          build-list: ./sprites ./assets ./main.lua ./conf.lua
           package-path: bare/mario.love
