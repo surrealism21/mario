@@ -35,7 +35,6 @@ function getCurrentTileTable() return levelEditorLevel["Pa"..tostring(editing_pa
 placingGridQuadrant = 1
 
 function drawEditor()
-    editorScrollingDraw()
     love.graphics.setColor(1, 1, 1, 1)
     for Pa = 1, tablelength(levelEditorLevel.Pa) do
         local currentTilemap = levelEditorLevel["Pa"..tostring(Pa).."_tilemap"]
@@ -184,27 +183,5 @@ function EDITOR_SELECT()
             end
         end
     end
-end
-
-
--- Camera
-tx=0
-ty=0
-function editorScrollingDraw()
-	mx = love.mouse.getX()
-	my = love.mouse.getY()
-	if love.mouse.isDown(3) then
-		if not mouse_pressed then
-			mouse_preslsed = true
-			dx = tx-mx
-			dy = ty-my
-		else
-			tx = mx+dx
-			ty = my+dy
-		end
-	elseif mouse_pressed then
-		mouse_pressed = false
-	end
-	love.graphics.translate(tx, ty)
 end
 
