@@ -5,6 +5,9 @@ require("atlas")
 
 function spriteSystemPrepare() 
     sprites.Logo3.prepare()
+    for i, v in pairs(sprites) do
+        v.prepare()
+    end
 end
 
 
