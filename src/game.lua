@@ -7,6 +7,7 @@ require("animatedSprite")
 cursorSettings = 1
 local logo = love.graphics.newImage("assets/logo.png")
 local menus = love.graphics.newImage("assets/menus.png")
+logoLocale = { x = 240, y = 25}
 function drawHomeScreen(dt)
     love.graphics.setFont(font)
     --Render the homescreen!
@@ -19,7 +20,6 @@ function drawHomeScreen(dt)
     love.graphics.setDefaultFilter("nearest", "nearest")
 
     -- cursor
-    logoLocale = { x = 240, y = 25}
     love.graphics.draw(logo, (logoLocale.x-(logo:getWidth() / 2)), logoLocale.y) -- this centers the logo on the X some fucking how what the 😭
     love.graphics.draw(menus, (260-(menus:getWidth() / 2)), 150)
     love.graphics.draw(menuCursor, 184, 150)

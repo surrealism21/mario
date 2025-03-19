@@ -2,7 +2,7 @@ require("spriteSystem")
 require("animatedSprite")
 -- EXAMPLE of the level format.
 
--- This file serves as a level.
+-- This file serves as the working level.
 
 
 
@@ -51,9 +51,8 @@ level = {
     Sprites = {
         {
             -- Sprite type. IMPORTANT.
-            type = "Logo3",
+            data = sprites.Logo3,
             -- Animation metadata. If this is missing, nothing happens
-            animationType = "linear",
             animation = Logo3Animation,
             -- Location information
             x = 10,
