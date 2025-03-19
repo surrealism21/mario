@@ -6,13 +6,21 @@ require("atlas")
 
 function spriteSystemPrepare()
     for i, v in pairs(level.Sprites) do
-        level.Sprites[i].data.prepare()
+        v.data.prepare()
     end
 end
 
 function spriteSystemRun()
     for i, v in pairs(level.Sprites) do
-        level.Sprites[i].data.run()
+        xOk, yOk = v.data.run(v.x, v.y)
+        v.x = xOk
+        v.y = yOk
+    end
+end
+
+function spriteSystemDraw()
+    for i, v in pairs(level.Sprites) do
+        v.data.draw(v.x, v.y)
     end
 end
 
@@ -22,6 +30,7 @@ sprites = { -- epic megatable for Sprites
     Logo3 = {
         prepare,
         run,
+        draw,
         -- Sprite width and height
         width = 42,
         height = 48,

@@ -57,6 +57,12 @@ level = {
             -- Location information
             x = 10,
             y = 10,
-        }
+        },
+        {
+            data = sprites.Logo3,
+            animation = Logo3Animation,
+            x = 12,
+            y = 11,
+        },
     },
 }
