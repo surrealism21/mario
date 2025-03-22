@@ -1,12 +1,40 @@
 If you hold the copyrights for any below assets in this project that have been "assumed public domain", you can have them removed. Please be ready to prove your identity while doing this.
+The only time an asset is assumbed public domain is if no license file and/or guidelines for use are provided.
 
 DM me on Discord @surrealismstudios
 Email me on Gmail dudecoolboiiiii@gmail.com
 
 If you're Nintendo just send a cease and desist letter to me at that point
 
+
+/////////////////////////////
+3RD PARTY ART / SOUND CREDITS
+/////////////////////////////
+
 Nintendo - Super Mario Bros 3
 
 NovaWare (Kousaku-P) - Super Mario Bros. 3 Opening theme (NES/Famicom Remix)
 No license available, assumed public domain
 Found online @https://www.youtube.com/watch?v=2CxNhRCKiJA
+
+////////////////////////////
+3RD PARTY TECHNOLOGY CREDITS
+////////////////////////////
+
+Stack overflow users - contributions to lib.lua
+Attribution-ShareAlike 4.0 International
+https://creativecommons.org/licenses/by-sa/4.0/
+I cannot document all the users whose posts helped me. If you by chance find your code here, add a pull request or message me and I will be glad to add it with significant proof of you creating the Stack Overflow post.
+
+Found online @hhttps://stackoverflow.com/
+
+Love2D form - general help
+Assumed public domain
+Found online @https://love2d.org/forums/
+
+BoundingBox.lua
+GNU Free Documentation License. Found in lib.lua line 54.
+Found online @https://love2d.org/wiki/BoundingBox.lua
+
+
+
