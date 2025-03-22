@@ -55,14 +55,8 @@ level = {
             -- Animation metadata. If this is missing, nothing happens
             animation = Logo3Animation,
             -- Location information
-            x = 10,
-            y = 10,
-        },
-        {
-            data = sprites.Logo3,
-            animation = Logo3Animation,
-            x = 12,
-            y = 11,
+            x = 224,
+            y = 111,
         },
     },
 }

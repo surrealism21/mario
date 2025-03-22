@@ -21,8 +21,8 @@ function drawHomeScreen(dt)
 
     -- cursor
     love.graphics.draw(logo, (logoLocale.x-(logo:getWidth() / 2)), logoLocale.y) -- this centers the logo on the X some fucking how what the 😭
-    love.graphics.draw(menus, (260-(menus:getWidth() / 2)), 150)
-    love.graphics.draw(menuCursor, 184, 150)
+    love.graphics.draw(menus, (260-(menus:getWidth() / 2)), 200)
+    love.graphics.draw(menuCursor, 184, 200)
 end
 
 function runHomeScreen(dt)

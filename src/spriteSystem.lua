@@ -34,12 +34,10 @@ sprites = { -- epic megatable for Sprites
         -- Sprite width and height
         width = 42,
         height = 48,
-
-        -- Animations, if they exist
-        animationFrame = 1, -- You cannot play multiple animations. Multiple of these are not needed. This variable is not to be changed!!!
+        
         -- note: weird animations currently are not implemented
         animations = {
-            Logo3 = {1, 4, "linear"},
+            default = {1, 4},
         },
     }
 }
