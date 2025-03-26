@@ -16,6 +16,7 @@ function love.load()
 	spriteSystemPrepare()
 
 	loadHomeScreen()
+	GAME_STATE = "game"
 end
 cursorSettings = 1
 function love.draw()
@@ -24,6 +25,8 @@ function love.draw()
 		drawHomeScreen(dt)
 	elseif GAME_STATE == "editor" then
 		drawEditor()
+	elseif GAME_STATE == "game" then
+		drawGame()
 	end
 	
 	spriteSystemDraw()
@@ -35,6 +38,8 @@ function love.update(dt)
 		runHomeScreen(dt)
 	elseif GAME_STATE == "editor" then
 		runEditor(dt)
+	elseif GAME_STATE == "game" then
+		runGame(dt)
 	end
 	mousePosition()
 

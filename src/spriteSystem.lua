@@ -5,13 +5,13 @@ require("atlas")
 -- It's kind of like OOB but weirder. Made from scratch.
 
 function spriteSystemPrepare()
-    for i, v in pairs(level.Sprites) do
+    for i, v in pairs(GLOBAL_LEVEL.Sprites) do
         v.data.prepare()
     end
 end
 
 function spriteSystemRun()
-    for i, v in pairs(level.Sprites) do
+    for i, v in pairs(GLOBAL_LEVEL.Sprites) do
         xOk, yOk = v.data.run(v.x, v.y)
         v.x = xOk
         v.y = yOk
@@ -19,7 +19,7 @@ function spriteSystemRun()
 end
 
 function spriteSystemDraw()
-    for i, v in pairs(level.Sprites) do
+    for i, v in pairs(GLOBAL_LEVEL.Sprites) do
         v.data.draw(v.x, v.y)
     end
 end

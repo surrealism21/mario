@@ -3,6 +3,8 @@ require("levelFormat")
 require("animatedSprite")
 
 
+GLOBAL_LEVEL = test
+
 -- Home's new screens
 cursorSettings = 1
 local logo = love.graphics.newImage("assets/logo.png")
@@ -14,7 +16,6 @@ function drawHomeScreen(dt)
     -- tiles decorations
     tileX = 1
     tileY = 1
-    drawLevelFile(level)
 
     -- title
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -30,5 +31,13 @@ function runHomeScreen(dt)
 end
 
 function loadHomeScreen()
-    GAME_STATE = "HomeScreen"
+    
+end
+
+function drawGame()
+    drawLevelFile(GLOBAL_LEVEL)
+end
+
+function runGame()
+
 end
