@@ -57,6 +57,8 @@ level = {
             -- Location information
             x = 224,
             y = 111,
+            xV = 0,
+            yV = 0,
         },
     },
 }

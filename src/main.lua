@@ -15,6 +15,8 @@ function love.load()
 	love.mouse.setVisible(false)
 	spriteSystemPrepare()
 
+	mario = love.graphics.newImage("assets/Mari.png")
+
 	loadHomeScreen()
 	GAME_STATE = "game"
 end

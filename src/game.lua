@@ -1,6 +1,7 @@
 require("atlas")
 require("levelFormat")
 require("animatedSprite")
+require("sprites/mario")
 
 
 GLOBAL_LEVEL = test
@@ -36,8 +37,9 @@ end
 
 function drawGame()
     drawLevelFile(GLOBAL_LEVEL)
+    drawMario()
 end
 
 function runGame()
-
+    marioRun()
 end

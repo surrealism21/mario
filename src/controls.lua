@@ -10,8 +10,6 @@ function love.keypressed(key, scancode, isrepeat)
             GAME_STATE = "editor"
             LEVEL_EDITOR_SETUP(level)
         end
-    elseif GAME_STATE == "editor" then
-
     end
 end
 
