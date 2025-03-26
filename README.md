@@ -11,4 +11,4 @@ Planned features:
 -Easy modding
 
 
-Note for modders: this game will not use classes but will instead use a level megatable, that will store everything because classes are not natively in Lua and have been a pain for me. Sorry.
+Note for modders: this game will use a prototyping like system? I don't know how to describe how objects are generated here but I bet it's somewhat common in Lua programs?
